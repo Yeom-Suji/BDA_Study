@@ -1,0 +1,121 @@
+<aside>
+💡 Pandas로 데이터 가공하기
+
+</aside>
+
+DataFrame 제공
+
+dataframe: 행과 열 레이블이 부착된 다차원 배열, 여러 가지 타입의 데이터를 가질 수 있고 데이터 누락도 허용
+
+## Pandas 객체 소개
+
+1. Series
+2. DataFrame
+3. Index
+
+### Pandas Series 객체
+
+인덱싱된 데이터의 1차원 배열, 일반화된 Numpy 배열
+
+- values: Numpy 배열
+- index: pd.Index 타입의 배열과 비슷한 객체
+
+- Numpy 배열과 차이점?: 명시적으로 정의된 인덱스 (인덱스가 꼭 연속적인 숫자일 필요X)
+
+→ 특수한 딕셔너리: 파이썬 딕셔너리와 달리 슬라이싱 같이 배열 스타일의 연산이 가능
+
+### Pandas DataFrame 객체
+
+일반화된 Numpy 배열, 2차원 배열
+
+- index 속성, column 속성
+
+특수한 딕셔너리: 열 이름을 열 데이터로 이뤄진 Series에 매핑
+
+- data[’col0’]: 첫 번째 열 반환
+
+키가 누락되면 NaN(숫자가 아님)으로 채움.
+
+### Pandas Index 객체
+
+불변의 배열: 일반적인 방법으로 변경 불가
+
+정렬된 집합
+
+## 데이터 인덱싱과 선택
+
+### Series에서 데이터 선택
+
+- Series: 딕셔너리
+- Series: 1차원 배열: 슬라이스, 마스킹, 팬시 인덱싱(원하는 데이터의 인덱스만 골라서→ 연속적인 인덱스일 필요x)
+- 인덱서: loc와 iloc
+    - loc: 명시적인 인덱스를 참조하는 인덱싱과 슬라이싱을 가능하게 함 → 지정했던 인덱스명으로
+    - iloc: 암묵적인 파이썬 스타일의 인덱스를 참조하게 해줌. → 암묵적인 정수 인덱스 허용.
+
+### DataFrame에서 데이터 선택
+
+- DataFrame: 딕셔너리: 열 이름으로 각 Series에 접근
+- DataFrame: 2차원 배열: iloc, loc 사용
+    - loc 안에서 마스킹과 팬시 인덱싱 결합 가능
+    - 슬라이싱은 행을 참조
+
+## Pandas에서 데이터 연산하기
+
+### 유니버설 함수: 인덱스 보존
+
+### 유니버설 함수: 인덱스 정렬
+
+- Series에서 인덱스 정렬
+    - 누락된 값 대신 fill_value=숫자, fill_value=fill: 모든 값의 평균으로 채움
+- DataFrame에서 인덱스 정렬
+
+### 유니버설 함수: DataFrame과 Series 간의 연산
+
+## 누락된 데이터 처리하기
+
+### 누락된 데이터 처리 방식의 트레이드오프
+
+1. 마스킹 방식
+2. 센티널 방식
+
+### Pandas에서 누락된 데이터
+
+- None: 센티널 값 → 단점) 파이썬 수준의 연산 수행 → 숫자배열에 사용x
+- NaN: 누락된 숫자 데이터: 특수 부동 소수점 값→ 빠른 연산 지원
+- Pandas에서 NaN과 None: 실수 배열을 표현할 방법x
+
+### Pandas의 Nullable 데이터 타입
+
+: 실수 배열 문제 해결
+
+### Null 값 연산하기
+
+| isnull() | 누락 값을 가리키는 부울 마스크(True, False) 생성 |
+| --- | --- |
+| notnull() | isnull()의 역 |
+| dropna() | 데이터에 필터를 적용한 버전을 반환 |
+| fillna() | 누락 값을 채우거나 전가된 데이터 사본을 반환 |
+- Null 값 탐지: isnull(), notnull()
+- Null 값 제거하기: dropna(), fillna()
+    - DataFrame에서는 단일 값만 삭제할 수 없고, 행이나 열 단위로 삭제 가능
+        - default 값: how= ‘any’: null 값을 포함하는 행이나 열 모두 삭제
+        - how= ‘all’: 모두 null 값인 행이나 열만 삭제
+        - thresh=값: null이 아닌 값이 최소 몇 개가 있어야 하는지 지정
+- Null 값 채우기: fillna()
+    - data.fillna(method= ‘ffill’): 이전 값으로 채우기
+    - data.fillna(method= ‘bfill’): 다음에 오는 값으로 채우기
+        - DataFrame에서는 기준이 되는 axis 지정
+
+## 계층적 인덱싱(다중 인덱싱)
+
+### 다중 인덱스된 Series
+
+- Pandas MultiIndex: Pandas 슬라이싱 표기법으로 접근
+- MultiIndex: 추가 차원
+
+### MultiIndex 생성 메서드
+
+생성자에 2개 이상의 인덱스 배열 리스트를 전달
+
+- 명시적 MultiIndex 생성자
+-
