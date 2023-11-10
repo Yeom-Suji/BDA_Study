@@ -1,1 +1,93 @@
+## 데이터세트 결합: Concat과 Append
 
+review: np.concatenate([데이터들])
+
+### pd.concat을 이용한 간단한 연결
+
+pd.concat([데이터, 데이터])
+
+- 인덱스 복제: 인덱스를 유지
+    - 반복을 에러로: pd.concat([데이터], verify_integrity=True): 중복 인덱스가 있을 때 예외 발생
+    - 인덱스 무시: ignore_index=True: 결과 Series에 새로운 정수 인덱스 생성
+    - 다중 인덱스 키 추가: keys 옵션 → 계층적 인덱스를 가진 Series
+
+### Join을 이용한 연결
+
+채울 값이 없으면 NA
+
+기본적: join= ‘outer’(열의 합집합), join= ‘inner’(열의 교집합)
+
+join_axes= [’데이터.columns’]
+
+- append() method: df1.append(df2)
+
+## 데이터세트 결합하기: 병합과 조인
+
+### 관계 대수
+
+### 조인 작업의 분류
+
+- 일대일조인: pd.merge(df1, df2)
+- 다대일조인
+- 다대다조인
+
+### 병합 키 지정
+
+- on: 키 열의 이름을 명시적으로 지정, on= ‘변수명’
+- left_on, right_on: 중복되는 열 → drop(’변수명’, axis= 1)
+- left_index, right_index: left_index&right_on or left_on&right_index → 인덱스와 열을 섞고자 하면
+
+### 조인을 위한 집합 연산 지정하기
+
+pd.merge(df1, df2, how= ‘inner’) → how 키워드: inner, outer, (left, right): 왼쪽(resp.오른쪽) 항목을 기준으로 조인
+
+### 열 이름이 겹치는 경우: suffixes 키워드
+
+충돌하는 열 이름 → suffixes 키워드로 접미사 별도 지정: suffixes= [”_L”, “_R”]
+
+## 집계와 분류
+
+### 행성 데이터
+
+### Pandas의 간단한 집계 연산
+
+sum(), mean(), median(), min(), max()
+
+### GroupBy: 분할, 적용, 결합
+
+- 분할, 적용, 결합: df.groupby(’key’).sum()
+- GroupBy 객체
+    - 열 인덱싱
+    - 그룹 내 반복 → apply 기능 사용하기
+    - 디스패치 메서드
+- 집계, 필터, 변환, 적용: aggregate(), filter(), tranform(), apply()
+    - 집계: aggregate([집계함수1, 함수2, …]), aggregate({컬럼명: 집계함수, …})
+    - 필터링: filter(): 그룹이 필터링을 통과하는지 아닌지를 지정하는 부울 값 반환
+    - 변환: .transform
+    - 적용: apply(): 임의의 함수를 그룹 결과에 적용할 때
+- 분할 키 지정하기
+    - 분할 키를 제공하는 리스트, 배열, 시리즈, 인덱스
+    - 인덱스를 그룹에 매핑한 딕셔너리나 시리즈
+    - 파이썬 함수
+
+## 피벗 테이블
+
+### 피벗 테이블 시작
+
+### 피벗 테이블 등장 배경
+
+### 피벗 테이블 구문
+
+```python
+titanic.pivot_table('survived', index= 'sex', columns= 'class')
+```
+
+- 다단계 피벗 테이블
+- 기타 피벗 테이블 옵션
+    
+    ```python
+    titanic.pivot_table(index= 'sex', columns= 'class', aggfunc= {'survived': 'sum', 'fare': 'mean'})
+    
+    titanic.pivot_table(index= 'sex', columns= 'class', margins= True) #그룹별 총합 계산
+    
+    ```
