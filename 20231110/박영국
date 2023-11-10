@@ -1,0 +1,9 @@
+#concat을 활용한 연결. 
+concat을 이용해서 index와 시리즈를 연결할 수 있다. 
+조인을 활용한 연결 -> 두개의 데이터 프레임을 합친다, 채울 값이 없으면 NA로 채워짐. 
+append - 더 적은 키입력으로 조인할 수 있다. 
+조인 종류 - 일대일조인, 일대 다 조인, 다대다 조인
+pandas의 집계 메서드 - count(), first(), last(), mean/median(), min/max(), std/var(), prod/sum() 
+group by() - 분할, 적용, 결합
+df.groupby('key').sum() - key 그룹의 합 
+# 피벗테이블 - 표 형태의 데이터로 작업하는 스프레드시트와 다른 프로그램에서 일반적으로 볼 수 있는 유사한 작업이다. 
