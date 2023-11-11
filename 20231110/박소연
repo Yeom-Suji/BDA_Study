@@ -1,2 +1,159 @@
+import numpy as np
+import pandas as pd
 
-.
+## pd.concat을 이용한 간단한 연결
+
+### 인덱스 복제
+
+#기본적으로 axis = 0
+# 인데스 복제, 인덱스 유지 특성
+pd.concat()
+np.concatenate()
+
+# 중복 인덱스 여부 확인 가능
+pd.concat([x, y], verify_integrity=True)
+
+# 인덱스 무시 가능
+pd.concat([x, y], ignore_index=True)
+
+# 다중 인덱스 키를 추가한다
+pd.concat([x, y], keys=['x', 'y']) #keys 인덱스 -> 원래 int 인덱스
+
+### 조인을 이용한 연결
+
+# 채울 수 없는 값, NA
+pd.concat([x, y])
+# 교집합
+pd.concat([x, y], join = 'inner')
+# 합집합
+pd.concat([x, y], join = 'outer') # default
+# 특정 열을 기준으로
+pd.concat([x, y], join_axes = [df5.columns])
+
+### append()
+
+# 원래의 객체를 변경하지 않음
+pd.concat([x, y]) = df1.append(df2)
+
+## 데이터세트 결합하기: 병합과 조인
+
+### 일대일 조인
+
+# 자동으로 공통 열을 키로 사용해 조인
+pd.merge(df1, df2)
+
+### 다대일 조인
+
+# 두 개의 키 열중 하나가 중복된 항목을 포함하는 경우
+
+### 다대다 조인
+
+# 모두 중복 항목이 존재한다면, 다대다 병합
+
+## 병합 키 지정
+
+### on 키워드
+
+# key 열의 이름을 명시적으로
+pd.merge(df1, df2, on = 'employee')
+
+### left_on / right_on
+
+# 다른 열을 가진 두 df 병합
+pd.merge(df1, df2, left_on = 'employee', right_on = 'name')
+# 중복되는 열 삭제 가능
+pd.merge(df1, df2, left_on = 'employee', right_on = 'name').drop('name', axis = 1)
+
+### left_index / right_index
+
+# 일반 데이터 열이 아닌 인덱스를 기준열로 사용
+pd.merge(df1, df2, left_index = 'True', right_index  = 'name')
+# 결합 사용
+pd.merge(df1, df2, left_index = 'True', right_on = 'name')
+
+## 조인을 위한 집합 연산 지정하기
+
+pd.merge(df1, df2, how = 'outer') #default : 'inner'
+pd.merge(df1, df2, how = 'left')
+
+## 열 이름이 겹치는 경우: suffixes 키워드
+
+pd.merge(df1, df2, on = 'name')
+pd.merge(df1, df2, on = 'name', suffixes = ['_L', '_R'])
+
+pd.merge(df1, df2, on = 'name', suffixes = ['_L', '_R'])
+
+## 집계와 분류
+
+df.means(axis = 'columns')
+
+planets.dropna().describe()
+
+## Groupby: 분할, 적용, 결합
+
+df.groupby('key').sum()
+
+### Groupby 객체
+
+- 열인덱싱 (수정된 Groupby 객체 반환)
+- 그룹 내 반복
+- 디스패치 메서드
+
+### 집계, 필터, 변환, 적용
+
+# 집계
+df.groupby('key').aggregate(['min', np.median, max])
+
+# 필터링
+df.groupby('key').std()
+df.groupby('key').filter(filter_func) # 필터링 연산 사용하면 그룹 속성을 기준으로 데이터 걸러냄
+
+# 변환
+df.groupby('key').transform(lambda x: x - x.mean())
+
+# apply
+df.groupby('key').apply(norm_by_data2) #임의의 함수를 그룹 결과에 적용할 때 사용
+
+### 분할 키 지정하기
+
+- 분할 키를 제공하는 리스트, 배열, 시리즈, 인덱스
+- 인덱스를 그룹에 매핑한 딕셔너리나 시리즈
+- 파이썬 함수
+- 유효한 키의 리스트
+
+## 피벗 테이블
+- 표 형태의 데이터로 작업하는 스프레드시트와 유사
+- groupby 집계의 다차원 버전
+
+# 피벗 테이블 시작
+
+# 피벗 테이블 등장 배경
+titanic.groupby('sex')[['survived']].mean()
+titanic.groupby(['sex', 'class'])[['survived']].aggregate('mean').unstack()
+
+# 피벗 테이블 구문
+titanic.pivot_table('survived', index = 'sex', columns = 'class')
+
+# 다단계 피벗 테이블
+titanic.pivot_table('survived', ['sex', 'age'], 'class')
+
+fare = pd.cut(titanic['fare'], 2)
+titanic.pivot_table('survived', ['sex', 'age'], [fare, 'class'])
+
+# 기타 피벗 테이블 옵션
+aggfunc()
+titanic.pivot_table( index = 'sex', columns = 'class', aggfunc={'survived': sum, 'fare': 'mean'})
+margins = True
+titanic.pivot_table('survived', index = 'sex', columns = 'class', margins = True)
+
+## 백터화된 문자열 연산
+
+#Pandas  문자열 연산 소개
+
+#Pandas  문자열 메소드 목록
+
+- 파이썬 문자열 메서드와 유사한 메서드
+- 정규 표현식을 활용하는 메서드
+- 기타 메서드
+    - 벡터화된 항목의 접근 및 슬라이싱
+    - 지시 변수
